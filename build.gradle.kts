@@ -6,6 +6,7 @@ val vDarkLaf = "3.0.2"
 
 plugins {
     id("java")
+    kotlin("jvm") version "2.1.10"
 }
 
 group = "com.aero.servicely"
@@ -31,8 +32,12 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:$vLombok")
     annotationProcessor("org.projectlombok:lombok:$vLombok")
     testAnnotationProcessor("org.projectlombok:lombok:$vLombok")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(17)
 }
