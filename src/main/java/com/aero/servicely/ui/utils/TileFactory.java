@@ -4,11 +4,26 @@
 // -------------------------------------------------------------------------------
 package com.aero.servicely.ui.utils;
 
+import com.aero.servicely.ui.UiConstants;
 import com.aero.servicely.ui.components.RoundedPanel;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * The static factory class is utilized to generate UI "tiles," which consist of a header component
+ * and a content component. These tiles are intended to serve as the primary components of the UI,
+ * with the objective of ensuring a consistent visual and functional style across the entirety of
+ * the application.
+ *
+ * @author Daniel Ladendorfer
+ */
 public class TileFactory {
+
+  private static final int MARGIN_IN_PX = 10;
+
+  private TileFactory() {
+    // static factory class
+  }
 
   /**
    * Creates a tile panel with a rounded border, a title header with a separator, and a content
@@ -19,33 +34,11 @@ public class TileFactory {
    * @return A JPanel styled as a tile.
    */
   public static JPanel createTile(String title, JComponent content) {
-    JPanel outerPanel = new JPanel(new BorderLayout()); // Wrapper panel to handle margins
-    outerPanel.setOpaque(false);
-    outerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margin of 10px
-
-    JPanel tilePanel = new RoundedPanel(); // Rounded corners with 20px radius
-    tilePanel.setLayout(new BorderLayout());
-    tilePanel.setBackground(tilePanel.getBackground().brighter());
-
-    // Header panel
-    JLabel titleLabel = new JLabel(title);
-    titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-    JPanel headerPanel = new JPanel(new BorderLayout());
-    headerPanel.setOpaque(false);
-    headerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-    headerPanel.add(titleLabel, BorderLayout.CENTER);
-    headerPanel.setBackground(headerPanel.getBackground().brighter());
-    headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-    headerPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
-
-    // Separator line
-
-    // Content panel
-    JPanel contentWrapper = new JPanel(new BorderLayout());
-    contentWrapper.setOpaque(false);
-    contentWrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-    contentWrapper.add(content, BorderLayout.CENTER);
+    // create panels
+    var outerPanel = createMarginPanel();
+    var tilePanel = createTilePanel();
+    var headerPanel = createHeaderPanel(title);
+    var contentWrapper = createContentPanel(content);
 
     // Assemble tile
     tilePanel.add(headerPanel, BorderLayout.NORTH);
@@ -55,5 +48,35 @@ public class TileFactory {
     outerPanel.add(tilePanel, BorderLayout.CENTER);
 
     return outerPanel;
+  }
+
+  private static JPanel createMarginPanel() {
+    var outerPanel = new JPanel(new BorderLayout()); // Wrapper panel to handle margins
+    outerPanel.setOpaque(false);
+    outerPanel.setBorder(
+        BorderFactory.createEmptyBorder(MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX));
+    return outerPanel;
+  }
+
+  private static RoundedPanel createTilePanel() {
+    var tilePanel = new RoundedPanel();
+    tilePanel.setLayout(new BorderLayout());
+    tilePanel.setBackground(tilePanel.getBackground().brighter());
+    return tilePanel;
+  }
+
+  private static JPanel createContentPanel(JComponent content) {
+    var contentWrapper = createMarginPanel();
+    contentWrapper.add(content, BorderLayout.CENTER);
+    return contentWrapper;
+  }
+
+  private static JPanel createHeaderPanel(String title) {
+    var titleLabel = new JLabel(title);
+    titleLabel.setFont(UiConstants.HEADER_FONT);
+
+    var headerPanel = createContentPanel(titleLabel);
+    headerPanel.setBackground(headerPanel.getBackground().brighter());
+    return headerPanel;
   }
 }
