@@ -51,7 +51,7 @@ public class TileFactory {
   }
 
   private static JPanel createMarginPanel() {
-    var outerPanel = new JPanel(new BorderLayout()); // Wrapper panel to handle margins
+    var outerPanel = new JPanel(new BorderLayout());
     outerPanel.setOpaque(false);
     outerPanel.setBorder(
         BorderFactory.createEmptyBorder(MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX));
