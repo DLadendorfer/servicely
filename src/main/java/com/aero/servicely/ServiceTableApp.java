@@ -1,7 +1,8 @@
 package com.aero.servicely;
 
+import com.aero.servicely.data.win.services.WindowsServiceInfo;
 import com.aero.servicely.ui.utils.TileFactory;
-import com.github.weisj.darklaf.components.text.SearchTextFieldWithHistory;
+import com.github.weisj.darklaf.components.text.SearchTextField;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -10,12 +11,10 @@ import javax.swing.table.*;
 
 public class ServiceTableApp extends JFrame {
 
-  public ServiceTableApp(List<ServiceInfo> services) {
-    setUIFont(new Font("Segoe UI", Font.PLAIN, 14)); // Set global font
-
+  public ServiceTableApp(List<WindowsServiceInfo> services) {
     setTitle("Windows Services");
-    setSize(900, 400);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(1200, 800);
+    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
 
@@ -25,7 +24,7 @@ public class ServiceTableApp extends JFrame {
     // Convert List<ServiceInfo> to Object[][] for JTable
     Object[][] data = new Object[services.size()][5];
     for (int i = 0; i < services.size(); i++) {
-      ServiceInfo service = services.get(i);
+      WindowsServiceInfo service = services.get(i);
       data[i][0] = service.name();
       data[i][1] = service.displayName();
       data[i][2] = service.status();
@@ -54,9 +53,8 @@ public class ServiceTableApp extends JFrame {
     table.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor());
 
     // Search bar
-    //
-    SearchTextFieldWithHistory searchField = new SearchTextFieldWithHistory();
-    searchField.setPreferredSize(new Dimension(200, 25));
+    var searchField = new SearchTextField();
+    searchField.setPreferredSize(new Dimension(200, 30));
     searchField.addKeyListener(
         new java.awt.event.KeyAdapter() {
           @Override
@@ -67,21 +65,10 @@ public class ServiceTableApp extends JFrame {
           }
         });
 
-    add(TileFactory.createTile("Search", searchField), BorderLayout.NORTH);
-    add(TileFactory.createTile("Services", new JScrollPane(table)), BorderLayout.CENTER);
-  }
-
-  /** Sets the default font for all Swing components. */
-  private static void setUIFont(Font font) {
-    UIManager.put("Label.font", font);
-    UIManager.put("Button.font", font);
-    UIManager.put("Table.font", font);
-    UIManager.put("TableHeader.font", font);
-    UIManager.put("TextField.font", font);
-    UIManager.put("ComboBox.font", font);
-    UIManager.put("CheckBox.font", font);
-    UIManager.put("RadioButton.font", font);
-    UIManager.put("TabbedPane.font", font);
+    var tablePanel = new JPanel(new BorderLayout());
+    tablePanel.add(searchField, BorderLayout.NORTH);
+    tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
+    add(TileFactory.createTile("Services", tablePanel), BorderLayout.CENTER);
   }
 
   /**
