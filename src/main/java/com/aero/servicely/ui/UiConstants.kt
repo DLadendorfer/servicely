@@ -4,22 +4,22 @@
 // -------------------------------------------------------------------------------
 package com.aero.servicely.ui
 
+import com.github.weisj.darklaf.LafManager
+import com.github.weisj.darklaf.theme.DarculaTheme
 import java.awt.Font
 import javax.swing.UIManager
 
 
 /**
  * Defines UI-related constants to ensure consistent styling across the application's user interface.
- * <p>
+ *
  * This object centralizes font definitions and applies them globally using {@link UIManager}.
  * It ensures that UI components maintain a uniform appearance throughout the application.
- * </p>
  *
- * <p><strong>Usage:</strong></p>
- * <pre>
+ * Usage:
+ *
  *     val label = JLabel("Example")
  *     label.font = UiConstants.DEFAULT_FONT
- * </pre>
  *
  * @author Daniel Ladendorfer
  */
@@ -35,6 +35,11 @@ object UiConstants {
     val HEADER_FONT: Font = Font("Segoe UI", Font.BOLD, 16)
 
     init {
+        installLookAndFeel()
+        applyDefaultFont()
+    }
+
+    private fun applyDefaultFont() {
         // Apply the default font to commonly used UI components
         UIManager.put("Label.font", DEFAULT_FONT)
         UIManager.put("Button.font", DEFAULT_FONT)
@@ -45,5 +50,9 @@ object UiConstants {
         UIManager.put("CheckBox.font", DEFAULT_FONT)
         UIManager.put("RadioButton.font", DEFAULT_FONT)
         UIManager.put("TabbedPane.font", DEFAULT_FONT)
+    }
+
+    private fun installLookAndFeel() {
+        LafManager.install(DarculaTheme())
     }
 }

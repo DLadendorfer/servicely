@@ -1,17 +1,19 @@
 package com.aero.servicely;
 
+import com.aero.servicely.core.os.invoker.WindowsServiceProvider;
 import com.aero.servicely.data.win.services.WindowsServiceInfo;
 import com.aero.servicely.ui.utils.TileFactory;
 import com.github.weisj.darklaf.components.text.SearchTextField;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.table.*;
 
 public class ServiceTableApp extends JFrame {
 
-  public ServiceTableApp(List<WindowsServiceInfo> services) {
+  public ServiceTableApp() {
+    var windowsServiceProvider = new WindowsServiceProvider();
+    var services = windowsServiceProvider.fetchCurrentServices();
     setTitle("Windows Services");
     setSize(1200, 800);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

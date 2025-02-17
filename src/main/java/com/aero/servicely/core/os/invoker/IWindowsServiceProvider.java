@@ -6,6 +6,7 @@ package com.aero.servicely.core.os.invoker;
 
 import com.aero.servicely.data.win.services.WindowsServiceInfo;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Defines the internal API to fetch the current snapshot of windows' services.
@@ -20,4 +21,12 @@ public interface IWindowsServiceProvider {
    * @return the list of service infos
    */
   List<WindowsServiceInfo> fetchCurrentServices();
+
+  /**
+   * Returns {@link WindowsServiceInfo information} about the specified service.
+   *
+   * @param internalName the internal service name
+   * @return the specified service or {@link Optional#empty()} if null
+   */
+  Optional<WindowsServiceInfo> fetchService(String internalName);
 }

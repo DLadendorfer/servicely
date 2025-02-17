@@ -49,25 +49,20 @@ object TileFactory {
         return outerPanel
     }
 
-    private fun createMarginPanel(): JPanel {
-        return JPanel(BorderLayout()).apply {
-            isOpaque = false
-            border = BorderFactory.createEmptyBorder(
-                MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX
-            )
-        }
+    private fun createMarginPanel(): JPanel = JPanel(BorderLayout()).apply {
+        isOpaque = false
+        border = BorderFactory.createEmptyBorder(
+            MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX
+        )
     }
 
-    private fun createTilePanel(): RoundedPanel {
-        return RoundedPanel().apply {
-            layout = BorderLayout()
-            background = background.brighter()
-        }
+    private fun createTilePanel(): RoundedPanel = RoundedPanel().apply {
+        layout = BorderLayout()
+        background = background.brighter()
     }
 
-    private fun createContentPanel(content: JComponent): JPanel {
-        return createMarginPanel().apply { add(content, BorderLayout.CENTER) }
-    }
+    private fun createContentPanel(content: JComponent): JPanel =
+        createMarginPanel().apply { add(content, BorderLayout.CENTER) }
 
     private fun createHeaderPanel(title: String): JPanel {
         val titleLabel = JLabel(title).apply {
