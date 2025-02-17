@@ -1,6 +1,7 @@
 package com.aero.servicely
 
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider
+import com.aero.servicely.ui.UiConstants
 import com.github.weisj.darklaf.LafManager
 import com.github.weisj.darklaf.theme.OneDarkTheme
 import javax.swing.SwingUtilities
@@ -14,6 +15,9 @@ object Main {
     fun main(args: Array<String>) {
         val windowsServiceProvider = WindowsServiceProvider()
         val services = windowsServiceProvider.fetchCurrentServices()
+
+        // apply Ui Constants
+        UiConstants.apply { }
 
         // Run Swing UI on Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater { ServiceTableApp(services).isVisible = true }
