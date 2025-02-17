@@ -10,8 +10,8 @@ import javax.swing.*;
 /**
  * A custom {@link JPanel} implementation that features rounded corners.
  *
- * <p>This panel supports transparency and uses antialiasing to smoothly render the rounded
- * corners. The background is manually redrawn to ensure proper rendering of the clipped corners.
+ * <p>This panel supports transparency and uses antialiasing to smoothly render the rounded corners.
+ * The background is manually redrawn to ensure proper rendering of the clipped corners.
  *
  * <p><strong>Usage:</strong>
  *
@@ -37,8 +37,8 @@ public class RoundedPanel extends JPanel {
   /**
    * Paints the panel with rounded corners.
    *
-   * <p>This method overrides {@link JPanel#paintComponent(Graphics)} to apply antialiasing and
-   * draw a rounded rectangle as the background.
+   * <p>This method overrides {@link JPanel#paintComponent(Graphics)} to apply antialiasing and draw
+   * a rounded rectangle as the background.
    *
    * @param g The {@link Graphics} object used for rendering.
    */
@@ -49,7 +49,10 @@ public class RoundedPanel extends JPanel {
 
     // Draw the rounded background
     g2.setColor(getBackground());
-    g2.fillRoundRect(0, 0, getWidth(), getHeight(), CORNER_RADIUS, CORNER_RADIUS);
+    g2.drawRoundRect(0, 0, getWidth() - 2, getHeight() - 2, CORNER_RADIUS, CORNER_RADIUS);
+    g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, CORNER_RADIUS, CORNER_RADIUS);
+    g2.fillRoundRect(0, 0, getWidth(), 30, CORNER_RADIUS, CORNER_RADIUS);
+    g2.fillRect(0, 20, getWidth(), 25);
 
     g2.dispose();
     super.paintComponent(g);

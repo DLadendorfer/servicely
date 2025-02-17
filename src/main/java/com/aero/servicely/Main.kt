@@ -3,12 +3,12 @@ package com.aero.servicely
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider
 import com.aero.servicely.ui.UiConstants
 import com.github.weisj.darklaf.LafManager
-import com.github.weisj.darklaf.theme.OneDarkTheme
+import com.github.weisj.darklaf.theme.DarculaTheme
 import javax.swing.SwingUtilities
 
 object Main {
     init {
-        LafManager.install(OneDarkTheme())
+        LafManager.install(DarculaTheme())
     }
 
     @JvmStatic
