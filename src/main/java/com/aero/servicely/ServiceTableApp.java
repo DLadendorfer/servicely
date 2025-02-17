@@ -25,9 +25,9 @@ public class ServiceTableApp extends JFrame {
     Object[][] data = new Object[services.size()][5];
     for (int i = 0; i < services.size(); i++) {
       WindowsServiceInfo service = services.get(i);
-      data[i][0] = service.name();
+      data[i][0] = service.internalName();
       data[i][1] = service.displayName();
-      data[i][2] = service.status();
+      data[i][2] = service.currentStatus();
       data[i][3] = service.startType();
       data[i][4] = "Actions"; // Placeholder
     }
