@@ -1,25 +1,24 @@
 package com.aero.servicely
 
-import com.aero.servicely.core.os.invoker.WindowsServiceProvider
-import com.aero.servicely.ui.UiConstants
-import com.github.weisj.darklaf.LafManager
-import com.github.weisj.darklaf.theme.DarculaTheme
-import javax.swing.SwingUtilities
+import com.aero.servicely.Application.runApplication
 
+/**
+ * The main entry point of the application.
+ *
+ * This object contains the {@code main} method, which starts the application by invoking
+ * {@link Application#runApplication()}.
+ *
+ */
 object Main {
-    init {
-        LafManager.install(DarculaTheme())
-    }
 
+    /**
+     * The application's main method.
+     *
+     * This method delegates execution to {@link Application#runApplication()},
+     * ensuring proper initialization and launch of the user interface.
+     *
+     * @param args Command-line arguments (not used in this implementation).
+     */
     @JvmStatic
-    fun main(args: Array<String>) {
-        val windowsServiceProvider = WindowsServiceProvider()
-        val services = windowsServiceProvider.fetchCurrentServices()
-
-        // apply Ui Constants
-        UiConstants.apply { }
-
-        // Run Swing UI on Event Dispatch Thread (EDT)
-        SwingUtilities.invokeLater { ServiceTableApp(services).isVisible = true }
-    }
+    fun main(args: Array<String>) = runApplication()
 }
