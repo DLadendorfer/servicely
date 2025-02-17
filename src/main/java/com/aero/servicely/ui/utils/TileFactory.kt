@@ -50,33 +50,32 @@ object TileFactory {
     }
 
     private fun createMarginPanel(): JPanel {
-        val outerPanel = JPanel(BorderLayout())
-        outerPanel.isOpaque = false
-        outerPanel.border = BorderFactory.createEmptyBorder(
-            MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX
-        )
-        return outerPanel
+        return JPanel(BorderLayout()).apply {
+            isOpaque = false
+            border = BorderFactory.createEmptyBorder(
+                MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX, MARGIN_IN_PX
+            )
+        }
     }
 
     private fun createTilePanel(): RoundedPanel {
-        val tilePanel = RoundedPanel()
-        tilePanel.layout = BorderLayout()
-        tilePanel.background = tilePanel.background.brighter()
-        return tilePanel
+        return RoundedPanel().apply {
+            layout = BorderLayout()
+            background = background.brighter()
+        }
     }
 
     private fun createContentPanel(content: JComponent): JPanel {
-        val contentWrapper = createMarginPanel()
-        contentWrapper.add(content, BorderLayout.CENTER)
-        return contentWrapper
+        return createMarginPanel().apply { add(content, BorderLayout.CENTER) }
     }
 
     private fun createHeaderPanel(title: String): JPanel {
-        val titleLabel = JLabel(title)
-        titleLabel.font = UiConstants.HEADER_FONT
+        val titleLabel = JLabel(title).apply {
+            font = UiConstants.HEADER_FONT
+        }
 
-        val headerPanel = createContentPanel(titleLabel)
-        headerPanel.background = headerPanel.background.brighter()
-        return headerPanel
+        return createContentPanel(titleLabel).apply {
+            background = background.brighter()
+        }
     }
 }

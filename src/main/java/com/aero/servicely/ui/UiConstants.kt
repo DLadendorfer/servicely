@@ -27,7 +27,7 @@ object UiConstants {
     /**
      * The default font used across standard UI components.
      */
-    val DEFAULT_FONT: Font = Font("Segoe UI", Font.PLAIN, 14)
+    private val DEFAULT_FONT: Font = Font("Segoe UI", Font.PLAIN, 14)
 
     /**
      * The font used for headers and prominent text elements.
