@@ -2,10 +2,10 @@ package com.aero.servicely;
 
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider;
 import com.aero.servicely.data.win.services.WindowsServiceInfo;
+import com.aero.servicely.ui.utils.IconButtonFactory;
 import com.aero.servicely.ui.utils.TileFactory;
 import com.github.weisj.darklaf.components.text.SearchTextField;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -52,7 +52,6 @@ public class ServiceTableApp extends JFrame {
     table.setRowHeight(table.getRowHeight() * 3 / 2); // 1.5x the default row height
 
     table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
-    table.getColumnModel().getColumn(4).setCellEditor(new ButtonEditor());
 
     // Search bar
     var searchField = new SearchTextField();
@@ -80,92 +79,20 @@ public class ServiceTableApp extends JFrame {
   private static class ButtonRenderer extends JPanel implements TableCellRenderer {
     public ButtonRenderer() {
       setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
-      add(createCircularButton("▶", new Color(76, 175, 80))); // Desaturated Green
-      add(createCircularButton("⏸", new Color(33, 150, 243))); // Desaturated Blue
-      add(createCircularButton("⏹", new Color(244, 67, 54))); // Desaturated Red
-    }
 
-    private JButton createCircularButton(String text, Color color) {
-      JButton button =
-          new JButton(text) {
-            @Override
-            protected void paintComponent(Graphics g) {
-              if (getModel().isPressed()) {
-                g.setColor(color.darker());
-              } else {
-                g.setColor(color);
-              }
-              g.fillOval(0, 0, getWidth(), getHeight()); // Draw circle
-              super.paintComponent(g);
-            }
+      var startButton = IconButtonFactory.create(IconButtonFactory.ButtonIcon.PLAY);
+      var pauseButton = IconButtonFactory.create(IconButtonFactory.ButtonIcon.PAUSE);
+      var stopButton = IconButtonFactory.create(IconButtonFactory.ButtonIcon.STOP);
 
-            @Override
-            public Dimension getPreferredSize() {
-              return new Dimension(30, 30); // Make button circular with a size of 30x30
-            }
-          };
-      button.setForeground(Color.WHITE);
-      button.setBorderPainted(false);
-      button.setFocusPainted(false);
-      return button;
+      add(startButton);
+      add(pauseButton);
+      add(stopButton);
     }
 
     @Override
     public Component getTableCellRendererComponent(
         JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
       return this;
-    }
-  }
-
-  /**
-   * Custom TableCellEditor to handle button clicks in the "Actions" column with desaturated colors.
-   */
-  private static class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
-    private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-
-    public ButtonEditor() {
-      panel.add(createCircularActionButton(new Color(86, 149, 91), "Start Service"));
-      panel.add(createCircularActionButton(new Color(97, 139, 221), "Pause Service"));
-      panel.add(createCircularActionButton(new Color(199, 78, 78), "Stop Service"));
-    }
-
-    private JButton createCircularActionButton(Color color, String actionCommand) {
-      JButton button =
-          new JButton() {
-            @Override
-            protected void paintComponent(Graphics g) {
-              if (getModel().isPressed()) {
-                g.setColor(color.darker());
-              } else {
-                g.setColor(color);
-              }
-              g.fillOval(0, 0, getWidth(), getHeight()); // Draw circle
-              super.paintComponent(g);
-            }
-
-            @Override
-            public Dimension getPreferredSize() {
-              return new Dimension(30, 30); // Circular size
-            }
-          };
-      button.setActionCommand(actionCommand);
-      button.addActionListener(this::handleButtonClick);
-      return button;
-    }
-
-    private void handleButtonClick(ActionEvent e) {
-      JOptionPane.showMessageDialog(null, e.getActionCommand() + " clicked!");
-    }
-
-    @Override
-    public Component getTableCellEditorComponent(
-        JTable table, Object value, boolean isSelected, int row, int column) {
-      return panel;
-    }
-
-    @Override
-    public Object getCellEditorValue() {
-      return "Actions";
     }
   }
 }

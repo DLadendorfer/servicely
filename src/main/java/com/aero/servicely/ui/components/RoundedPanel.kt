@@ -61,6 +61,6 @@ class RoundedPanel : JPanel() {
     }
 
     companion object {
-        private const val CORNER_RADIUS = 12
+        private const val CORNER_RADIUS = 8
     }
 }
