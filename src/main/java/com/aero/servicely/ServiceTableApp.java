@@ -27,10 +27,26 @@ public class ServiceTableApp extends JFrame {
     Object[][] data = new Object[services.size()][5];
     for (int i = 0; i < services.size(); i++) {
       WindowsServiceInfo service = services.get(i);
-      data[i][0] = service.internalName();
-      data[i][1] = service.displayName();
-      data[i][2] = service.currentStatus();
-      data[i][3] = service.startType();
+      data[i][0] = service.displayName();
+      data[i][1] = service.internalName();
+      data[i][2] =
+          switch (Integer.parseInt(service.currentStatus())) {
+            case 1 -> "Stopped";
+            case 2 -> "Starting";
+            case 3 -> "Stopping";
+            case 4 -> "Running";
+            case 5 -> "Paused";
+            case 6 -> "Waiting for event";
+            default -> "Unknown";
+          };
+      data[i][3] =
+          switch (Integer.parseInt(service.startType())) {
+            case 0 -> "Disabled.";
+            case 1 -> "Manual";
+            case 2 -> "Automatic";
+            case 3 -> "Automatic (delayed)";
+            default -> "Unknown";
+          };
       data[i][4] = "Actions"; // Placeholder
     }
 
@@ -39,7 +55,7 @@ public class ServiceTableApp extends JFrame {
         new DefaultTableModel(data, columnNames) {
           @Override
           public boolean isCellEditable(int row, int column) {
-            return column == 4; // Make only the actions column editable
+            return false;
           }
         };
 
@@ -51,6 +67,7 @@ public class ServiceTableApp extends JFrame {
     // Increase the row height by 1.5x the default height
     table.setRowHeight(table.getRowHeight() * 3 / 2); // 1.5x the default row height
 
+    table.getColumnModel().getColumn(2).setCellRenderer(new StatusCellRenderer());
     table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
 
     // Search bar
@@ -70,6 +87,30 @@ public class ServiceTableApp extends JFrame {
     tablePanel.add(searchField, BorderLayout.NORTH);
     tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
     add(TileFactory.createTile("Services", tablePanel), BorderLayout.CENTER);
+  }
+
+  /**
+   * A custom TableCellRenderer to change the foreground color of the "Status" column based on text.
+   */
+  static class StatusCellRenderer extends JLabel implements TableCellRenderer {
+    @Override
+    public Component getTableCellRendererComponent(
+        JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+      // Set the text of the cell
+      setText(value.toString());
+
+      // Change the foreground color based on the value
+      if ("Running".equalsIgnoreCase(value.toString())) {
+        setForeground(new Color(74, 185, 93));
+      } else if ("Stopped".equalsIgnoreCase(value.toString())) {
+        setForeground(new Color(199, 45, 45));
+      } else {
+        setForeground(new Color(44, 156, 185));
+      }
+
+      // Return the label component
+      return this;
+    }
   }
 
   /**
