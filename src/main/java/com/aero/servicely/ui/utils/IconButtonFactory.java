@@ -1,8 +1,11 @@
 package com.aero.servicely.ui.utils;
 
 import java.awt.*;
+import java.net.URL;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A utility class for creating {@link JButton} instances with a scaled icon. This class provides a
@@ -41,18 +44,40 @@ public class IconButtonFactory {
    */
   public static JButton create(ButtonIcon buttonIcon) {
     // Load the icon from the specified resource path
-    var icon = new ImageIcon(IconButtonFactory.class.getResource(buttonIcon.getPath()));
+    String path = buttonIcon.getPath();
+
+    if (StringUtils.isBlank(path)) {
+      throw new IllegalArgumentException("ButtonIcon path cannot be empty");
+    }
+
+    URL resource = IconButtonFactory.class.getResource(path);
+
+    if (resource == null) {
+      throw new IllegalArgumentException("ButtonIcon '%s' not found".formatted(path));
+    }
+
+    var icon = new ImageIcon(resource);
 
     // Check if the icon was loaded successfully
     if (icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
       throw new IllegalArgumentException(
-          "The resource at " + buttonIcon.getPath() + " is not a valid image.");
+          "The resource at %s is not a valid image.".formatted(path));
     }
 
     // Scale the image to 20x20 pixels
     var scaledImage = icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
     // Create a button with the scaled icon and return it
-    return new JButton(new ImageIcon(scaledImage));
+    var button = new JButton(new ImageIcon(scaledImage));
+    button.setUI(new BasicButtonUI()); // Use minimal UI
+    button.setBorder(null);
+    button.setContentAreaFilled(false);
+    button.setFocusPainted(false);
+    button.setOpaque(false);
+
+    // Custom paint to remove any remaining UI elements
+    button.setBorderPainted(false);
+    button.setRolloverEnabled(false);
+    return button;
   }
 }

@@ -41,6 +41,6 @@ object Application {
      * This ensures that the UI is initialized and updated in a thread-safe manner.
      */
     private fun invokeApp() {
-        SwingUtilities.invokeLater { ServiceTableApp().isVisible = true }
+        SwingUtilities.invokeLater { ServicelyFrame().isVisible = true }
     }
 }
