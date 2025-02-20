@@ -3,6 +3,7 @@ val vLombok = "1.18.34"
 val vGson = "2.10.1"
 val vJunit = "5.10.0"
 val vDarkLaf = "3.0.2"
+val vCommonsLang = "3.0"
 
 plugins {
     id("java")
@@ -17,23 +18,23 @@ repositories {
 }
 
 dependencies {
-    // gson - (de-)serialization
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("org.apache.commons:commons-lang3:$vCommonsLang")
     implementation("com.google.code.gson:gson:$vGson")
-
-    // look and feel
     implementation("com.github.weisj:darklaf-core:$vDarkLaf")
 
-    // junit::jupiter
+    compileOnly("org.projectlombok:lombok:$vLombok")
+
+    annotationProcessor("org.projectlombok:lombok:$vLombok")
+
     testImplementation(platform("org.junit:junit-bom:$vJunit"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    // lombok
-    compileOnly("org.projectlombok:lombok:$vLombok")
     testCompileOnly("org.projectlombok:lombok:$vLombok")
-    annotationProcessor("org.projectlombok:lombok:$vLombok")
+
     testAnnotationProcessor("org.projectlombok:lombok:$vLombok")
-    implementation(kotlin("stdlib-jdk8"))
 }
+
 
 tasks.test {
     useJUnitPlatform()

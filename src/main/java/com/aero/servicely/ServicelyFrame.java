@@ -2,26 +2,55 @@ package com.aero.servicely;
 
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider;
 import com.aero.servicely.data.win.services.WindowsServiceInfo;
+import com.aero.servicely.ui.components.renderers.ServiceStatusCellRenderer;
 import com.aero.servicely.ui.utils.IconButtonFactory;
 import com.aero.servicely.ui.utils.TileFactory;
 import com.github.weisj.darklaf.components.text.SearchTextField;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import org.jetbrains.annotations.NotNull;
 
-public class ServiceTableApp extends JFrame {
+public class ServicelyFrame extends JFrame {
 
-  public ServiceTableApp() {
+  public ServicelyFrame() {
     var windowsServiceProvider = new WindowsServiceProvider();
     var services = windowsServiceProvider.fetchCurrentServices();
-    setTitle("Windows Services");
+    setTitle("Servicely - Service Manager");
     setSize(1200, 800);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setLayout(new BorderLayout());
 
+    var table = createMainTable(services);
+    var searchBar = createSearchBar(table);
+
+    var tablePanel = new JPanel(new BorderLayout());
+    tablePanel.add(searchBar, BorderLayout.NORTH);
+    tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
+    add(TileFactory.createTile("Services", tablePanel), BorderLayout.CENTER);
+  }
+
+  @NotNull
+  private static SearchTextField createSearchBar(JTable table) {
+    var searchField = new SearchTextField();
+    searchField.setPreferredSize(new Dimension(200, 30));
+    searchField.addKeyListener(
+        new java.awt.event.KeyAdapter() {
+          @Override
+          public void keyReleased(java.awt.event.KeyEvent e) {
+            String text = searchField.getText();
+            ((TableRowSorter<?>) table.getRowSorter())
+                .setRowFilter(text.trim().isEmpty() ? null : RowFilter.regexFilter("(?i)" + text));
+          }
+        });
+    return searchField;
+  }
+
+  @NotNull
+  private static JTable createMainTable(java.util.List<WindowsServiceInfo> services) {
     // Column names for the table
-    String[] columnNames = {"Name", "Display Name", "Status", "Start Type", "Actions"};
+    String[] columnNames = {"Display Name", "Name", "Status", "Start Type", "Actions"};
 
     // Convert List<ServiceInfo> to Object[][] for JTable
     Object[][] data = new Object[services.size()][5];
@@ -50,7 +79,6 @@ public class ServiceTableApp extends JFrame {
       data[i][4] = "Actions"; // Placeholder
     }
 
-    // Create table model
     DefaultTableModel model =
         new DefaultTableModel(data, columnNames) {
           @Override
@@ -67,50 +95,20 @@ public class ServiceTableApp extends JFrame {
     // Increase the row height by 1.5x the default height
     table.setRowHeight(table.getRowHeight() * 3 / 2); // 1.5x the default row height
 
-    table.getColumnModel().getColumn(2).setCellRenderer(new StatusCellRenderer());
+    table.setRowSelectionAllowed(false);
+
+    table.getColumnModel().getColumn(2).setCellRenderer(new ServiceStatusCellRenderer());
+    table.getColumnModel().getColumn(2).setWidth(100);
+    table.getColumnModel().getColumn(2).setMinWidth(100);
+    table.getColumnModel().getColumn(2).setMaxWidth(100);
+    table.getColumnModel().getColumn(3).setWidth(150);
+    table.getColumnModel().getColumn(3).setMinWidth(150);
+    table.getColumnModel().getColumn(3).setMaxWidth(150);
     table.getColumnModel().getColumn(4).setCellRenderer(new ButtonRenderer());
-
-    // Search bar
-    var searchField = new SearchTextField();
-    searchField.setPreferredSize(new Dimension(200, 30));
-    searchField.addKeyListener(
-        new java.awt.event.KeyAdapter() {
-          @Override
-          public void keyReleased(java.awt.event.KeyEvent e) {
-            String text = searchField.getText();
-            ((TableRowSorter<?>) table.getRowSorter())
-                .setRowFilter(text.trim().isEmpty() ? null : RowFilter.regexFilter("(?i)" + text));
-          }
-        });
-
-    var tablePanel = new JPanel(new BorderLayout());
-    tablePanel.add(searchField, BorderLayout.NORTH);
-    tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
-    add(TileFactory.createTile("Services", tablePanel), BorderLayout.CENTER);
-  }
-
-  /**
-   * A custom TableCellRenderer to change the foreground color of the "Status" column based on text.
-   */
-  static class StatusCellRenderer extends JLabel implements TableCellRenderer {
-    @Override
-    public Component getTableCellRendererComponent(
-        JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-      // Set the text of the cell
-      setText(value.toString());
-
-      // Change the foreground color based on the value
-      if ("Running".equalsIgnoreCase(value.toString())) {
-        setForeground(new Color(74, 185, 93));
-      } else if ("Stopped".equalsIgnoreCase(value.toString())) {
-        setForeground(new Color(199, 45, 45));
-      } else {
-        setForeground(new Color(44, 156, 185));
-      }
-
-      // Return the label component
-      return this;
-    }
+    table.getColumnModel().getColumn(4).setWidth(80);
+    table.getColumnModel().getColumn(4).setMinWidth(80);
+    table.getColumnModel().getColumn(4).setMaxWidth(80);
+    return table;
   }
 
   /**
@@ -126,6 +124,7 @@ public class ServiceTableApp extends JFrame {
       var stopButton = IconButtonFactory.create(IconButtonFactory.ButtonIcon.STOP);
 
       add(startButton);
+      startButton.addActionListener(e -> System.out.println("start"));
       add(pauseButton);
       add(stopButton);
     }

@@ -17,17 +17,19 @@ import javax.swing.UIManager
  * It ensures that UI components maintain a uniform appearance throughout the application.
  *
  * Usage:
- *
+ *```kotlin
  *     val label = JLabel("Example")
  *     label.font = UiConstants.DEFAULT_FONT
- *
+ *```
  * @author Daniel Ladendorfer
  */
 object UiConstants {
+
     /**
      * The default font used across standard UI components.
      */
-    private val DEFAULT_FONT: Font = Font("Segoe UI", Font.PLAIN, 14)
+
+    val DEFAULT_FONT: Font = Font("Segoe UI", Font.PLAIN, 14)
 
     /**
      * The font used for headers and prominent text elements.
