@@ -3,7 +3,6 @@ package com.aero.servicely.ui.utils;
 import java.awt.*;
 import java.net.URL;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -68,16 +67,6 @@ public class IconButtonFactory {
     var scaledImage = icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
     // Create a button with the scaled icon and return it
-    var button = new JButton(new ImageIcon(scaledImage));
-    button.setUI(new BasicButtonUI()); // Use minimal UI
-    button.setBorder(null);
-    button.setContentAreaFilled(false);
-    button.setFocusPainted(false);
-    button.setOpaque(false);
-
-    // Custom paint to remove any remaining UI elements
-    button.setBorderPainted(false);
-    button.setRolloverEnabled(false);
-    return button;
+    return new JButton(new ImageIcon(scaledImage));
   }
 }
