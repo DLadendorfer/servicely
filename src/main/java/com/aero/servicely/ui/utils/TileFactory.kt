@@ -7,6 +7,7 @@ package com.aero.servicely.ui.utils
 import com.aero.servicely.ui.UiConstants
 import com.aero.servicely.ui.components.RoundedPanel
 import java.awt.BorderLayout
+import java.awt.Color
 import javax.swing.BorderFactory
 import javax.swing.JComponent
 import javax.swing.JLabel
@@ -58,7 +59,7 @@ object TileFactory {
 
     private fun createTilePanel(): RoundedPanel = RoundedPanel().apply {
         layout = BorderLayout()
-        background = background.brighter()
+        background = Color(50, 115, 133)
     }
 
     private fun createContentPanel(content: JComponent): JPanel =
@@ -69,8 +70,6 @@ object TileFactory {
             font = UiConstants.HEADER_FONT
         }
 
-        return createContentPanel(titleLabel).apply {
-            background = background.brighter()
-        }
+        return createContentPanel(titleLabel)
     }
 }

@@ -39,7 +39,7 @@ object CommandLib {
      * val command = String.format(CommandLib.GET_SERVICE, "Spooler")
      * ```
      */
-    const val GET_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"}"
+    const val GET_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"} | ConvertTo-Json"
 
     /**
      * Starts a Windows service by name.

@@ -12,8 +12,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 
 /**
@@ -37,13 +39,15 @@ public class WindowsServiceProvider implements IWindowsServiceProvider {
 
   @Override
   public Optional<WindowsServiceInfo> fetchService(String internalName) {
-    return GSON.fromJson(
-        invoke(CommandLib.GET_SERVICE.formatted(internalName)), WINDOWS_SERVICE_INFO);
+    return Optional.ofNullable(
+        GSON.fromJson(
+            invoke(CommandLib.GET_SERVICE.formatted(internalName)), WINDOWS_SERVICE_INFO));
   }
 
   @SneakyThrows
   private String invoke(String psCommand) {
-    String command = PS_CMD.formatted(psCommand);
+    String command = PS_CMD.formatted(psCommand.replace("\"", "\\\""));
+    System.out.println(command);
 
     // Initialize ProcessBuilder to execute PowerShell command
     var processBuilder = new ProcessBuilder("cmd.exe", "/c", command);
@@ -52,14 +56,9 @@ public class WindowsServiceProvider implements IWindowsServiceProvider {
 
     // Capture the output
     try (var inputStream = process.getInputStream();
-        var reader = new BufferedReader(new InputStreamReader(inputStream))) {
-      var output = new StringBuilder();
-      String line;
-
-      // Read each line of the output
-      while ((line = reader.readLine()) != null) {
-        output.append(line).append(System.lineSeparator());
-      }
+        var reader =
+            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+      String output = reader.lines().collect(Collectors.joining("\n"));
 
       // Wait for the process to complete
       process.waitFor();
