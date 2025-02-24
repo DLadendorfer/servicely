@@ -4,7 +4,7 @@
 // -------------------------------------------------------------------------------
 package com.aero.servicely.core.os.invoker;
 
-import com.aero.servicely.data.win.services.WindowsServiceInfo;
+import com.aero.servicely.data.win.services.ServiceInfo;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +21,13 @@ public interface IOsDependentServiceProvider
    *
    * @return the list of service infos
    */
-  List<WindowsServiceInfo> fetchCurrentServices();
+  List<ServiceInfo> fetchCurrentServices();
 
   /**
-   * Returns {@link WindowsServiceInfo information} about the specified service.
+   * Returns {@link ServiceInfo information} about the specified service.
    *
    * @param internalName the internal service name
    * @return the specified service or {@link Optional#empty()} if null
    */
-  Optional<WindowsServiceInfo> fetchService(String internalName);
+  Optional<ServiceInfo> fetchService(String internalName);
 }

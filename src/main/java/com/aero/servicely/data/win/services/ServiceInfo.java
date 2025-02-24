@@ -26,7 +26,7 @@ import java.util.List;
  * @param canStop Indicates whether the service can be stopped manually.
  * @author Daniel Ladendorfer
  */
-public record WindowsServiceInfo(
+public record ServiceInfo(
     @SerializedName("Name") String internalName,
     @SerializedName("DisplayName") String displayName,
     @SerializedName("Status") String currentStatus,

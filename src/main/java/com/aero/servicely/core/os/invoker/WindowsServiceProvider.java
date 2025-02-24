@@ -5,7 +5,7 @@
 package com.aero.servicely.core.os.invoker;
 
 import com.aero.servicely.commands.CommandLib;
-import com.aero.servicely.data.win.services.WindowsServiceInfo;
+import com.aero.servicely.data.win.services.ServiceInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -22,17 +22,17 @@ public class WindowsServiceProvider implements IOsDependentServiceProvider {
 
   private static final Gson GSON = new Gson();
 
-  private static final Type WINDOWS_SERVICE_INFO = new TypeToken<WindowsServiceInfo>() {}.getType();
+  private static final Type WINDOWS_SERVICE_INFO = new TypeToken<ServiceInfo>() {}.getType();
   private static final Type WINDOWS_SERVICE_INFO_LIST =
-      new TypeToken<List<WindowsServiceInfo>>() {}.getType();
+      new TypeToken<List<ServiceInfo>>() {}.getType();
 
   @Override
-  public List<WindowsServiceInfo> fetchCurrentServices() {
+  public List<ServiceInfo> fetchCurrentServices() {
     return GSON.fromJson(invoke(CommandLib.GET_SERVICES), WINDOWS_SERVICE_INFO_LIST);
   }
 
   @Override
-  public Optional<WindowsServiceInfo> fetchService(String internalName) {
+  public Optional<ServiceInfo> fetchService(String internalName) {
     return Optional.ofNullable(
         GSON.fromJson(invoke(CommandLib.GET_SERVICE, internalName), WINDOWS_SERVICE_INFO));
   }

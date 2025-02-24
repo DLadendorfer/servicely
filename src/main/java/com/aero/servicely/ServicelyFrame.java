@@ -1,14 +1,16 @@
 package com.aero.servicely;
 
+import com.aero.servicely.controller.DataController;
 import com.aero.servicely.core.os.invoker.IOsDependentServiceProvider;
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider;
-import com.aero.servicely.data.win.services.WindowsServiceInfo;
+import com.aero.servicely.data.win.services.ServiceInfo;
 import com.aero.servicely.ui.components.renderers.ServiceStatusCellRenderer;
 import com.aero.servicely.ui.utils.IconButtonFactory;
 import com.aero.servicely.ui.utils.TileFactory;
 import com.github.weisj.darklaf.components.text.SearchTextField;
 import java.awt.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.table.*;
 import lombok.SneakyThrows;
@@ -17,12 +19,19 @@ import org.jetbrains.annotations.NotNull;
 public class ServicelyFrame extends JFrame {
 
   private final transient IOsDependentServiceProvider provider;
+  private final DataController dataController;
   private JPanel serviceInfoPanel = null;
+  private JTable table;
 
   @SneakyThrows
   public ServicelyFrame() {
     provider = new WindowsServiceProvider();
-    var services = provider.fetchCurrentServices();
+    dataController = new DataController(this);
+    dataController.addTask(
+        () ->
+            CompletableFuture.supplyAsync(provider::fetchCurrentServices)
+                .thenAccept(
+                    services -> SwingUtilities.invokeLater(() -> updateDataModel(services))));
     setTitle("Servicely - Service Manager");
     setSize(1200, 800);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -30,7 +39,7 @@ public class ServicelyFrame extends JFrame {
     setLayout(new BorderLayout());
     getContentPane().setBackground(new Color(43, 43, 43));
 
-    var table = createMainTable(services);
+    var table = createMainTable();
     var searchBar = createSearchBar(table);
 
     var tablePanel = new JPanel(new BorderLayout());
@@ -84,45 +93,19 @@ public class ServicelyFrame extends JFrame {
   }
 
   @NotNull
-  private JTable createMainTable(List<WindowsServiceInfo> services) {
+  private JTable createMainTable() {
     // Column names for the table
     String[] columnNames = {"Display Name", "Status", "Start Type", "Internal Name"};
 
-    // Convert List<ServiceInfo> to Object[][] for JTable
-    Object[][] data = new Object[services.size()][5];
-    for (int i = 0; i < services.size(); i++) {
-      WindowsServiceInfo service = services.get(i);
-      data[i][0] = service.displayName();
-      data[i][1] =
-          switch (Integer.parseInt(service.currentStatus())) {
-            case 1 -> "Stopped";
-            case 2 -> "Starting";
-            case 3 -> "Stopping";
-            case 4 -> "Running";
-            case 5 -> "Paused";
-            case 6 -> "Waiting for event";
-            default -> "Unknown";
-          };
-      data[i][2] =
-          switch (Integer.parseInt(service.startType())) {
-            case 0 -> "Disabled.";
-            case 1 -> "Manual";
-            case 2 -> "Automatic";
-            case 3 -> "Automatic (delayed)";
-            default -> "Unknown";
-          };
-      data[i][3] = service.internalName();
-    }
-
     DefaultTableModel model =
-        new DefaultTableModel(data, columnNames) {
+        new DefaultTableModel(new Object[0][5], columnNames) {
           @Override
           public boolean isCellEditable(int row, int column) {
             return false;
           }
         };
 
-    JTable table = new JTable(model);
+    table = new JTable(model);
     table.setRowSorter(new TableRowSorter<>(model));
     table.setShowGrid(false);
     table.setIntercellSpacing(new Dimension(0, 0));
@@ -153,5 +136,43 @@ public class ServicelyFrame extends JFrame {
                             (String) table.getModel().getValueAt(e.getLastIndex(), 3))));
 
     return table;
+  }
+
+  private void updateDataModel(List<ServiceInfo> serviceInfos) {
+    DefaultTableModel model = (DefaultTableModel) table.getModel();
+    // Ensure the row exists
+    while (model.getRowCount() <= serviceInfos.size()) {
+      model.addRow(new Object[model.getColumnCount()]); // Add empty rows if needed
+    }
+
+    for (int i = 0; i < serviceInfos.size(); i++) {
+      ServiceInfo service = serviceInfos.get(i);
+      table.setValueAt(service.displayName(), i, 0);
+      table.setValueAt(
+          switch (Integer.parseInt(service.currentStatus())) {
+            case 1 -> "Stopped";
+            case 2 -> "Starting";
+            case 3 -> "Stopping";
+            case 4 -> "Running";
+            case 5 -> "Paused";
+            case 6 -> "Waiting for event";
+            default -> "Unknown";
+          },
+          i,
+          1);
+      table.setValueAt(
+          service.startType() == null
+              ? "Unknown"
+              : switch (Integer.parseInt(service.startType())) {
+                case 0 -> "Disabled.";
+                case 1 -> "Manual";
+                case 2 -> "Automatic";
+                case 3 -> "Automatic (delayed)";
+                default -> "Unknown";
+              },
+          i,
+          2);
+      table.setValueAt(service.internalName(), i, 3);
+    }
   }
 }
