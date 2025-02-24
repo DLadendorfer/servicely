@@ -1,5 +1,6 @@
 package com.aero.servicely;
 
+import com.aero.servicely.core.os.invoker.IOsDependentServiceProvider;
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider;
 import com.aero.servicely.data.win.services.WindowsServiceInfo;
 import com.aero.servicely.ui.components.renderers.ServiceStatusCellRenderer;
@@ -15,9 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class ServicelyFrame extends JFrame {
 
-  private final transient WindowsServiceProvider provider;
+  private final transient IOsDependentServiceProvider provider;
   private JPanel serviceInfoPanel = null;
 
+  @SneakyThrows
   public ServicelyFrame() {
     provider = new WindowsServiceProvider();
     var services = provider.fetchCurrentServices();

@@ -26,7 +26,7 @@ object CommandLib {
      * This command is useful for fetching details about all services currently installed on the system.
      * The output can be parsed into objects for further processing.
      */
-    const val GET_SERVICES: String = "Get-Service | ConvertTo-Json"
+    const val GET_SERVICES: String = "GetServices"
 
     /**
      * Retrieves information about a specific Windows service by name.
@@ -39,7 +39,7 @@ object CommandLib {
      * val command = String.format(CommandLib.GET_SERVICE, "Spooler")
      * ```
      */
-    const val GET_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"} | ConvertTo-Json"
+    const val GET_SERVICE: String = "GetService"
 
     /**
      * Starts a Windows service by name.
