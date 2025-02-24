@@ -13,7 +13,8 @@ import java.util.Optional;
  *
  * @author Daniel Ladendorfer
  */
-public interface IWindowsServiceProvider {
+public interface IOsDependentServiceProvider
+{
 
   /**
    * Returns a list of all currently running Windows services.
