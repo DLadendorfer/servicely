@@ -1,7 +1,9 @@
 package com.aero.servicely;
 
+import com.aero.servicely.commands.CommandLib;
 import com.aero.servicely.controller.DataController;
 import com.aero.servicely.core.os.invoker.IOsDependentServiceProvider;
+import com.aero.servicely.core.os.invoker.PowerShellInvoker;
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider;
 import com.aero.servicely.data.win.services.ServiceInfo;
 import com.aero.servicely.ui.components.renderers.ServiceStatusCellRenderer;
@@ -62,9 +64,12 @@ public class ServicelyFrame extends JFrame {
     var startButton = IconButtonFactory.create(IconButtonFactory.ButtonIcon.PLAY);
     var pauseButton = IconButtonFactory.create(IconButtonFactory.ButtonIcon.PAUSE);
     var stopButton = IconButtonFactory.create(IconButtonFactory.ButtonIcon.STOP);
-    startButton.addActionListener(e -> System.out.println("start"));
-    pauseButton.addActionListener(e -> System.out.println("pause"));
-    stopButton.addActionListener(e -> System.out.println("stop"));
+    startButton.addActionListener(
+        e -> PowerShellInvoker.runScript(CommandLib.START_SERVICE, internalName));
+    pauseButton.addActionListener(
+        e -> PowerShellInvoker.runScript(CommandLib.SUSPEND_SERVICE, internalName));
+    stopButton.addActionListener(
+        e -> PowerShellInvoker.runScript(CommandLib.STOP_SERVICE, internalName));
 
     panel.add(new JLabel(provider.fetchService(internalName).get().displayName()));
     panel.add(startButton);

@@ -31,8 +31,7 @@ public class PowerShellInvoker {
   }
 
   @SneakyThrows
-  public static String runScript(String scriptPath, String... args)
-      throws IOException, InterruptedException {
+  public static String runScript(String scriptPath, String... args) {
     var scriptFile = extractScriptFromResources("/scripts/ps1/%s.ps1".formatted(scriptPath));
     ProcessBuilder processBuilder =
         new ProcessBuilder(
