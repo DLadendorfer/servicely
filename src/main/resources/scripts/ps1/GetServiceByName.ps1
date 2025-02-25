@@ -32,7 +32,7 @@
 
 # Define a parameter for the internal service name
 param(
-    [Parameter(Mandatory=$true, HelpMessage="Enter the internal service name (e.g., 'wuauserv')")]
+    [Parameter(Mandatory = $true, HelpMessage = "Enter the internal service name (e.g., 'wuauserv')")]
     [string] $internalName
 )
 
@@ -40,11 +40,14 @@ param(
 $service = Get-Service | Where-Object { $_.Name -eq $internalName }
 
 # Check if the service was found
-if ($service) {
+if ($service)
+{
     # Convert the service object to JSON format
     $jsonOutput = $service | ConvertTo-Json -Depth 2
     Write-Output $jsonOutput
-} else {
+}
+else
+{
     # Output a JSON-formatted error message if the service does not exist
     Write-Output "{ `"Error`": `"Service '$internalName' not found`" }"
 }

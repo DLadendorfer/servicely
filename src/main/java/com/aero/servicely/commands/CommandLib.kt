@@ -34,25 +34,16 @@ object CommandLib {
      * The `%s` placeholder should be replaced with the exact service name.
      * The command filters services based on their `Name` property.
      *
-     * Example:
-     * ```kotlin
-     * val command = String.format(CommandLib.GET_SERVICE, "Spooler")
-     * ```
      */
-    const val GET_SERVICE: String = "GetService"
+    const val GET_SERVICE: String = "GetServiceByName"
 
     /**
      * Starts a Windows service by name.
      *
      * This command attempts to start the specified service if it is currently stopped.
      * If the service is already running, no action is taken.
-     *
-     * Example:
-     * ```kotlin
-     * val command = String.format(CommandLib.START_SERVICE, "wuauserv")
-     * ```
      */
-    const val START_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"} | Start-Service"
+    const val START_SERVICE: String = "StartServiceByName"
 
     /**
      * Restarts a Windows service by name.
@@ -60,7 +51,7 @@ object CommandLib {
      * This command first stops the specified service (if running) and then starts it again.
      * It is useful when a service needs to be refreshed due to configuration changes or issues.
      */
-    const val RESTART_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"} | Restart-Service"
+    const val RESTART_SERVICE: String = "RestartServiceByName"
 
     /**
      * Stops a Windows service by name.
@@ -68,7 +59,7 @@ object CommandLib {
      * If the specified service is running, this command attempts to stop it.
      * Some services may require administrative privileges to stop.
      */
-    const val STOP_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"} | Stop-Service"
+    const val STOP_SERVICE: String = "StopServiceByName"
 
     /**
      * Resumes a paused Windows service by name.
@@ -76,7 +67,7 @@ object CommandLib {
      * This command is applicable only to services that support pausing and resuming.
      * If the service is currently paused, it will be resumed and continue running.
      */
-    const val RESUME_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"} | Resume-Service"
+    const val RESUME_SERVICE: String = "ResumeServiceByName"
 
     /**
      * Suspends a running Windows service by name.
@@ -84,5 +75,5 @@ object CommandLib {
      * This command pauses the specified service if it supports suspension.
      * Pausing a service allows it to be resumed later without fully stopping it.
      */
-    const val SUSPEND_SERVICE: String = "Get-Service | ? {\$_.Name -eq \"%s\"} | Suspend-Service"
+    const val SUSPEND_SERVICE: String = "SuspendServiceByName"
 }
