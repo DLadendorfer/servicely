@@ -22,7 +22,7 @@ import javax.swing.JPanel
  * @author Daniel Ladendorfer
  */
 object TileFactory {
-    private const val MARGIN_IN_PX = 10
+    private const val MARGIN_IN_PX = 8
 
     /**
      * Creates a tile panel with a rounded border, a title header with a separator, and a content
@@ -59,7 +59,7 @@ object TileFactory {
 
     private fun createTilePanel(): RoundedPanel = RoundedPanel().apply {
         layout = BorderLayout()
-        background = Color(50, 115, 133)
+        background = Color(70,70,70)
     }
 
     private fun createContentPanel(content: JComponent): JPanel =

@@ -29,12 +29,12 @@ object UiConstants {
      * The default font used across standard UI components.
      */
 
-    val DEFAULT_FONT: Font = Font("Segoe UI", Font.PLAIN, 14)
+    val DEFAULT_FONT: Font = Font("Segoe UI", Font.PLAIN, 12)
 
     /**
      * The font used for headers and prominent text elements.
      */
-    val HEADER_FONT: Font = Font("Segoe UI", Font.BOLD, 16)
+    val HEADER_FONT: Font = Font("Segoe UI", Font.BOLD, 14)
 
     init {
         installLookAndFeel()

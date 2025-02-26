@@ -37,9 +37,9 @@ public class ServiceStatusCellRenderer implements TableCellRenderer {
     // Change the foreground color based on the value
     badge.setBackground(
         switch (value.toString()) {
-          case "Running" -> new Color(58, 124, 72);
-          case "Stopped" -> new Color(134, 47, 47);
-          default -> new Color(50, 115, 133);
+          case "Running" -> new Color(60, 145, 79);
+          case "Stopped" -> new Color(157, 48, 48);
+          default -> new Color(51, 131, 152);
         });
 
     var panel = new JPanel();
