@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 
 public class PowerShellInvoker {
 
@@ -32,18 +34,13 @@ public class PowerShellInvoker {
 
   @SneakyThrows
   public static String runScript(String scriptPath, String... args) {
-    var scriptFile = extractScriptFromResources("/scripts/ps1/%s.ps1".formatted(scriptPath));
-    ProcessBuilder processBuilder =
-        new ProcessBuilder(
-            "powershell", "-ExecutionPolicy", "Bypass", "-File", scriptFile.getAbsolutePath());
-    processBuilder.redirectErrorStream(true);
+    var process = createProcess(scriptPath, args);
+    return readProcessOutput(process);
+  }
 
-    // Add arguments to the command
-    for (String arg : args) {
-      processBuilder.command().add(arg);
-    }
-
-    Process process = processBuilder.start();
+  @NotNull
+  private static String readProcessOutput(Process process)
+      throws IOException, InterruptedException {
     try (var inputStream = process.getInputStream();
         var reader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
@@ -54,5 +51,17 @@ public class PowerShellInvoker {
 
       return output;
     }
+  }
+
+  @NotNull
+  private static Process createProcess(String scriptPath, String[] args) throws IOException {
+    var scriptFile = extractScriptFromResources("/scripts/ps1/%s.ps1".formatted(scriptPath));
+    var processBuilder =
+        new ProcessBuilder(
+                "powershell", "-ExecutionPolicy", "Bypass", "-File", scriptFile.getAbsolutePath())
+            .redirectErrorStream(true);
+    Arrays.stream(args).forEach(processBuilder.command()::add);
+
+    return processBuilder.start();
   }
 }

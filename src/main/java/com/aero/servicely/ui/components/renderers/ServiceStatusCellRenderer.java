@@ -1,6 +1,6 @@
 package com.aero.servicely.ui.components.renderers;
 
-import com.aero.servicely.ui.UiConstants;
+import com.aero.servicely.ui.components.Badge;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -12,40 +12,10 @@ public class ServiceStatusCellRenderer implements TableCellRenderer {
   @Override
   public Component getTableCellRendererComponent(
       JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-    var badge =
-        new JLabel(" " + value.toString() + " ") {
-          @Override
-          protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            // Get label size and draw a rounded rectangle as background
-            int arc = 8; // Corner roundness
-            int width = getWidth();
-            int height = getHeight();
-            g2.setColor(getBackground());
-            g2.fillRoundRect(0, 0, width, height, arc, arc);
-
-            super.paintComponent(g);
-            g2.dispose();
-          }
-        };
-
-    badge.setOpaque(false);
-    badge.setFont(UiConstants.INSTANCE.getDEFAULT_FONT().deriveFont(Font.BOLD));
-
-    // Change the foreground color based on the value
-    badge.setBackground(
-        switch (value.toString()) {
-          case "Running" -> new Color(60, 145, 79);
-          case "Stopped" -> new Color(157, 48, 48);
-          default -> new Color(51, 131, 152);
-        });
-
     var panel = new JPanel();
+    var badge = new Badge(String.valueOf(value));
     panel.add(badge);
 
-    // Return the label component
     return panel;
   }
 }

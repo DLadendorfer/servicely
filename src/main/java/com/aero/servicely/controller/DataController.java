@@ -26,10 +26,10 @@ public class DataController {
   }
 
   private void start() {
-    scheduler.scheduleAtFixedRate(this::invokeTasks, 0, 3, TimeUnit.SECONDS);
+    scheduler.scheduleAtFixedRate(this::invokeScheduledTasks, 0, 3, TimeUnit.SECONDS);
   }
 
-  private void invokeTasks() {
+  private void invokeScheduledTasks() {
     tasks.stream().parallel().forEach(Runnable::run);
   }
 }
