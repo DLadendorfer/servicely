@@ -2,7 +2,7 @@
 // Copyright (c) Ladendorfer Daniel.
 // All Rights Reserved.  See LICENSE in the project root for license information.
 // -------------------------------------------------------------------------------
-package com.aero.servicely.controller;
+package com.aero.servicely.core.controller;
 
 import com.aero.servicely.ServicelyFrame;
 import java.util.ArrayList;

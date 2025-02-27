@@ -12,8 +12,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
+@Slf4j
 public class PowerShellInvoker {
 
   private static File extractScriptFromResources(String resourcePath) throws IOException {
@@ -49,12 +51,14 @@ public class PowerShellInvoker {
       // Wait for the process to complete
       process.waitFor();
 
+      log.info(output);
       return output;
     }
   }
 
   @NotNull
   private static Process createProcess(String scriptPath, String[] args) throws IOException {
+    log.info("{} ~ {}", scriptPath, Arrays.toString(args));
     var scriptFile = extractScriptFromResources("/scripts/ps1/%s.ps1".formatted(scriptPath));
     var processBuilder =
         new ProcessBuilder(

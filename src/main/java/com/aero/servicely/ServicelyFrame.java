@@ -1,12 +1,13 @@
 package com.aero.servicely;
 
 import com.aero.servicely.commands.CommandLib;
-import com.aero.servicely.controller.DataController;
+import com.aero.servicely.core.controller.DataController;
 import com.aero.servicely.core.os.invoker.IOsDependentServiceProvider;
 import com.aero.servicely.core.os.invoker.PowerShellInvoker;
 import com.aero.servicely.core.os.invoker.WindowsServiceProvider;
 import com.aero.servicely.data.win.services.ServiceInfo;
 import com.aero.servicely.ui.components.renderers.ServiceStatusCellRenderer;
+import com.aero.servicely.ui.panels.LogPanel;
 import com.aero.servicely.ui.utils.IconButtonFactory;
 import com.aero.servicely.ui.utils.TileFactory;
 import com.github.weisj.darklaf.components.text.SearchTextField;
@@ -16,8 +17,10 @@ import java.util.concurrent.CompletableFuture;
 import javax.swing.*;
 import javax.swing.table.*;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
+@Slf4j
 public class ServicelyFrame extends JFrame {
 
   private final transient IOsDependentServiceProvider provider;
@@ -48,6 +51,7 @@ public class ServicelyFrame extends JFrame {
     tablePanel.add(searchBar, BorderLayout.NORTH);
     tablePanel.add(new JScrollPane(table), BorderLayout.CENTER);
     add(TileFactory.createTile("Services", tablePanel), BorderLayout.CENTER);
+    add(TileFactory.createTile("Log", new LogPanel()), BorderLayout.SOUTH);
   }
 
   @SneakyThrows

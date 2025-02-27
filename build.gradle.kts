@@ -4,6 +4,8 @@ val vGson = "2.10.1"
 val vJunit = "5.10.0"
 val vDarkLaf = "3.0.2"
 val vCommonsLang = "3.0"
+val vLog4J2 = "2.20.0"
+val vSlf4j = "2.0.9"
 
 plugins {
     id("java")
@@ -22,6 +24,10 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:$vCommonsLang")
     implementation("com.google.code.gson:gson:$vGson")
     implementation("com.github.weisj:darklaf-core:$vDarkLaf")
+    implementation("org.slf4j:slf4j-api:$vSlf4j")
+    implementation("org.apache.logging.log4j:log4j-core:$vLog4J2")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:$vLog4J2")
+    implementation("org.apache.logging.log4j:log4j-api:$vLog4J2")
 
     compileOnly("org.projectlombok:lombok:$vLombok")
 
