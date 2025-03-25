@@ -32,8 +32,8 @@ Example output:
     - The output is useful for automation, logging, or integration with other tools.
 #>
 
-# Retrieve all services on the system
-$services = Get-Service
+# Retrieve all services on the system, sort by status descending (running first)
+$services = Get-Service  | Sort-Object status -Descending
 
 # Convert the service objects into JSON format
 # The `-Depth` parameter is optional but helps with nested properties

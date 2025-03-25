@@ -22,7 +22,7 @@ import javax.swing.JPanel
  * @author Daniel Ladendorfer
  */
 object TileFactory {
-    private const val MARGIN_IN_PX = 8
+    private const val MARGIN_IN_PX = 4
 
     /**
      * Creates a tile panel with a rounded border, a title header with a separator, and a content
