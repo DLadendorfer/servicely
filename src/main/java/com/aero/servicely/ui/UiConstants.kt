@@ -39,7 +39,6 @@ object UiConstants {
     init {
         installLookAndFeel()
         applyDefaultFont()
-
     }
 
     private fun applyDefaultFont() {

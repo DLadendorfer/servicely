@@ -46,7 +46,7 @@ object TileFactory {
 
         // Wrap the tile in an outer panel to apply margins
         outerPanel.add(tilePanel, BorderLayout.CENTER)
-
+        outerPanel.isOpaque = true
         return outerPanel
     }
 
@@ -59,7 +59,8 @@ object TileFactory {
 
     private fun createTilePanel(): RoundedPanel = RoundedPanel().apply {
         layout = BorderLayout()
-        background = Color(70,70,70)
+        background = Color(38, 38, 38)
+        foreground = Color(144, 144, 144)
     }
 
     private fun createContentPanel(content: JComponent): JPanel =

@@ -11,20 +11,20 @@ import javax.swing.*;
 
 public class Badge extends JLabel {
 
-  private static final List<String> GREEN_BADGES = List.of("Running");
-  private static final List<String> STOPPED_BADGES = List.of("Stopped");
+  private static final List<String> GREEN_BADGES = List.of("RUNNING");
+  private static final List<String> STOPPED_BADGES = List.of("STOPPED");
 
   public Badge(String badgeText) {
-    super(" %s ".formatted(badgeText));
+    super(" %s ".formatted(badgeText.toUpperCase()));
     setOpaque(false);
-    setFont(UiConstants.INSTANCE.getDEFAULT_FONT().deriveFont(Font.BOLD));
+    setFont(UiConstants.INSTANCE.getDEFAULT_FONT().deriveFont(Font.BOLD, 14));
     applyBackground(badgeText);
   }
 
   private void applyBackground(String badgeText) {
-    if (GREEN_BADGES.contains(badgeText)) {
+    if (GREEN_BADGES.contains(badgeText.toUpperCase())) {
       setBackground(new Color(60, 145, 79));
-    } else if (STOPPED_BADGES.contains(badgeText)) {
+    } else if (STOPPED_BADGES.contains(badgeText.toUpperCase())) {
       setBackground(new Color(157, 48, 48));
     } else {
       setBackground(new Color(51, 131, 152));
